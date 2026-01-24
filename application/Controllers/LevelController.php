@@ -1,5 +1,13 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Core\Controller;
+use App\Core\Redirect;
+use App\Models\UserModel;
+use App\Models\LoginModel;
+use App\Models\LevelModel;
+
 class LevelController extends Controller {
     public function __construct() {
         parent::__construct();

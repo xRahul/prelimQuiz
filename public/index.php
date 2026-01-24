@@ -1,11 +1,15 @@
 <?php
 
+use App\Core\Application;
+use Dotenv\Dotenv;
 
-if (!file_exists('../application/config/config.php')) {
-    header('Location: /install.php');
-    die;
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+// Load .env if exists
+$dotenvPath = dirname(__DIR__);
+if (file_exists($dotenvPath . '/.env')) {
+    $dotenv = Dotenv::createImmutable($dotenvPath);
+    $dotenv->load();
 }
-
-require '../vendor/autoload.php';
 
 $application = new Application();

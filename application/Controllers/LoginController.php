@@ -1,5 +1,12 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Core\Controller;
+use App\Core\Redirect;
+use App\Models\UserModel;
+use App\Models\LoginModel;
+
 class LoginController extends Controller {
 
     public function __construct() {

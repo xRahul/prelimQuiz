@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Models;
+
+use App\Core\DatabaseFactory;
+
 /**
  * Class RegisterModel
  * Handles user registration

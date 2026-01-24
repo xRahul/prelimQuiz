@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 class Application {
 
     protected $controller;
@@ -19,11 +21,10 @@ class Application {
         }
 
         $this->controllerName = ucwords($this->controllerName) . 'Controller';
+        $controllerClass = 'App\\Controllers\\' . $this->controllerName;
 
-        if (file_exists(Config::get('PATH_CONTROLLER') . $this->controllerName . '.php')) {
-
-            require Config::get('PATH_CONTROLLER') . $this->controllerName . '.php';
-            $this->controller = new $this->controllerName();
+        if (class_exists($controllerClass)) {
+            $this->controller = new $controllerClass();
 
             if (method_exists($this->controller, $this->method)) {
                 if (!empty($this->params)) {
@@ -32,6 +33,7 @@ class Application {
                     $this->controller->{$this->method}();
                 }
             } else {
+                // TODO: specific 404 controller or view
                 require Config::get('PATH_VIEW') . '404.php';
             }
         } else {

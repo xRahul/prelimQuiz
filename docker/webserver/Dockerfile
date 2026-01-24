@@ -1,19 +1,36 @@
-FROM centos:7
+FROM php:8.2-apache
 
-RUN yum update -y
-RUN yum install -y epel-release
-RUN rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-RUN yum install -y php56w php56w-opcache httpd php56w-pdo php56w-pecl-mongodb
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    zip \
+    unzip \
+    libcurl4-openssl-dev \
+    pkg-config \
+    libssl-dev \
+    && docker-php-ext-install pdo_mysql zip
 
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
-RUN mv composer.phar /usr/local/bin/composer
+# Install MongoDB extension
+RUN pecl install mongodb && docker-php-ext-enable mongodb
 
-RUN yum install -y php56w-mysqlnd
+# Enable mod_rewrite
+RUN a2enmod rewrite
 
-RUN sed -i -e 's/DocumentRoot \"\/var\/www\/html\"/DocumentRoot \"\/var\/www\/html\/public\"/g' /etc/httpd/conf/httpd.conf
-RUN sed -i -e 's/AllowOverride None/AllowOverride All/g' /etc/httpd/conf/httpd.conf
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy application code
+COPY . /var/www/html
+
+# Install dependencies via Composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Configure Apache DocumentRoot
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 EXPOSE 80
-ENTRYPOINT ["httpd", "-D", "FOREGROUND"]
