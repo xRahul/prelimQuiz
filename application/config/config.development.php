@@ -1,8 +1,8 @@
 <?php
 return array(
-    'URL' => 'http://' . $_SERVER['HTTP_HOST'] . str_replace('public', '', dirname($_SERVER['SCRIPT_NAME'])),
+    'URL' => 'http://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost') . str_replace('public', '', dirname($_SERVER['SCRIPT_NAME'])),
 
-    'PATH_CONTROLLER' => realpath(dirname(__FILE__).'/../../') . '/application/controllers/',
+    'PATH_CONTROLLER' => realpath(dirname(__FILE__).'/../../') . '/application/Controllers/',
     'PATH_VIEW' => realpath(dirname(__FILE__).'/../../') . '/application/views/',
 
     'DEFAULT_CONTROLLER' => 'index',

@@ -1,0 +1,1 @@
+{"version":2,"defects":{"Tests\\Unit\\ConfigTest::testGetEnvVariable":8,"Tests\\Unit\\ConfigTest::testGetDefaultConfig":8},"times":{"Tests\\Unit\\ConfigTest::testGetEnvVariable":0.003,"Tests\\Unit\\ConfigTest::testGetDefaultConfig":0,"Tests\\Unit\\ExampleTest::testTrueIsTrue":0,"Tests\\Integration\\SmokeTest::testNothing":0}}

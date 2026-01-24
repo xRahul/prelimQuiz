@@ -1,27 +1,44 @@
-version: '2'
+version: '3.8'
+
 services:
-  mysqldb:
-    image: mysql
+  web:
+    build:
+      context: .
+      dockerfile: docker/webserver/Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - DB_TYPE=mysql
+      - DB_HOST=db
+      - DB_NAME=prelim_quiz
+      - DB_USER=quizUser
+      - DB_PASS=quizPassword
+      - DB_PORT=3306
+      - MONGODB_URI=mongodb://mongo:27017
+      - MONGODB_DB=prelim_quiz
+    depends_on:
+      - db
+      - mongo
+
+  db:
+    image: mysql:8.0
     ports:
       - "3306:3306"
     volumes:
-      - ./docker/data/mysql:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: prelim_quiz
       MYSQL_USER: quizUser
       MYSQL_PASSWORD: quizPassword
-  mongodb:
-    image: mongo
-    volumes:
-      - ./docker/data/mongo:/data/db
 
-  webserver:
-    build: ./docker/webserver
-    ports:
-      - "80:80"
+  mongo:
+    image: mongo:6.0
     volumes:
-      - ./:/var/www/html/
-    links:
-      - mysqldb:mysqlhost
-      - mongodb:mongohost
+      - mongo_data:/data/db
+
+volumes:
+  mysql_data:
+  mongo_data:

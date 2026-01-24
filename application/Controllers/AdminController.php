@@ -1,5 +1,15 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Core\Controller;
+use App\Core\Config;
+use App\Core\Redirect;
+use App\Models\UserModel;
+use App\Models\LoginModel;
+use App\Models\RegisterModel;
+use App\Models\LevelModel;
+
 class AdminController extends Controller
 {
 

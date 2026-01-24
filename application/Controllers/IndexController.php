@@ -1,5 +1,13 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Core\Controller;
+use App\Core\Config;
+use App\Core\Redirect;
+use App\Models\UserModel;
+use App\Models\LoginModel;
+
 class IndexController extends Controller {
     public function __construct() {
         parent::__construct();
